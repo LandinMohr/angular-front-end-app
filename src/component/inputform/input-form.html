@@ -1,0 +1,47 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+  <label for="firstName">First Name:</label>
+  <input id="firstName" type="text" formControlName="firstName" />
+
+  <div *ngIf="form.get('firstName')?.touched && form.get('firstName')?.invalid">
+    <small *ngIf="form.get('firstName')?.errors?.['required']">
+      First name is required
+    </small>
+    <small *ngIf="form.get('firstName')?.errors?.['minTwo']">
+      First name must be at least 2 characters
+    </small>
+  </div>
+
+  <label for="lastName">Last Name:</label>
+  <input id="lastName" type="text" formControlName="lastName" />
+
+  <div *ngIf="form.get('lastName')?.touched && form.get('lastName')?.invalid">
+    <small *ngIf="form.get('lastName')?.errors?.['required']">
+      Last name is required
+    </small>
+    <small *ngIf="form.get('lastName')?.errors?.['forbidden']">
+      This last name is not allowed
+    </small>
+  </div>
+
+  <label for="email">Email:</label>
+  <input id="email" type="email" formControlName="email" />
+
+  <div *ngIf="form.get('email')?.touched && form.get('email')?.invalid">
+    <small>Enter a valid email</small>
+  </div>
+
+  <div formArrayName="nicknames">
+    <label>Nicknames:</label>
+
+    <div *ngFor="let nickname of nicknames.controls; let i = index">
+      <input type="text" [formControlName]="i" />
+      <button type="button" (click)="removeNickname(i)">Remove</button>
+    </div>
+
+    <button type="button" (click)="addNickname()">Add Nickname</button>
+  </div>
+
+  <button type="submit">Submit</button>
+
+</form>
