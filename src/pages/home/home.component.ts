@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { InputFormComponent } from "../../component/inputform/input-form";
+import { ApiService } from '../../services/api.service';
 
 
 @Component({
@@ -7,6 +8,27 @@ import { InputFormComponent } from "../../component/inputform/input-form";
   standalone: true,
   templateUrl: './home.template.html',
   styleUrls: ['./home.styles.css'],
-  imports: [InputFormComponent],
+  imports: [InputFormComponent]
 })
-export class HomeComponent {}
+export class HomeComponent implements OnInit  {  
+
+constructor(public api: ApiService) { }
+
+  ngOnInit(): void {
+    this.loadObjects();
+  }
+
+loadObjects() {
+  this.api.getObjects().subscribe({
+    next: (response) => {
+      console.log(response);
+      this.api.loading.set(false);
+    },
+    error: (error) => {
+      console.error(error);
+      this.api.error.set('Failed to load objects');
+      this.api.loading.set(false);
+    }
+  });
+}
+}
