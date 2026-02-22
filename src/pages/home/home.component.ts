@@ -1,34 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 import { InputFormComponent } from "../../component/inputform/input-form";
 import { ApiService } from '../../services/api.service';
-
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   templateUrl: './home.template.html',
   styleUrls: ['./home.styles.css'],
-  imports: [InputFormComponent]
+  imports: [
+    CommonModule,
+    RouterModule,
+    InputFormComponent
+  ]
 })
-export class HomeComponent implements OnInit  {  
+export class HomeComponent implements OnInit {
 
-constructor(public api: ApiService) { }
+  constructor(public api: ApiService) { }
 
   ngOnInit(): void {
-    this.loadObjects();
+    // Home page does not need data loading
   }
-
-loadObjects() {
-  this.api.getObjects().subscribe({
-    next: (response) => {
-      console.log(response);
-      this.api.loading.set(false);
-    },
-    error: (error) => {
-      console.error(error);
-      this.api.error.set('Failed to load objects');
-      this.api.loading.set(false);
-    }
-  });
-}
 }

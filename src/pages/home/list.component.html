@@ -1,0 +1,72 @@
+<h2>Objects List</h2>
+
+<!-- Search -->
+<input
+  [(ngModel)]="query"
+  (input)="applyFilters()"
+  placeholder="Search by name..."
+/>
+
+<!-- Sorting -->
+<select [(ngModel)]="sortOrder" (change)="applyFilters()">
+  <option value="asc">Sort A → Z</option>
+  <option value="desc">Sort Z → A</option>
+</select>
+
+@if (loading) {
+  <div>Loading...</div>
+}
+
+@if (error) {
+  <div>{{ error }}</div>
+}
+
+@if (!loading && filteredObjects.length === 0) {
+  <div>No results found.</div>
+}
+
+<ul>
+  @for (obj of paginatedObjects; track obj.id) {
+    <li>
+      <strong>{{ obj.name }}</strong>
+      (ID: {{ obj.id }})
+
+      <br />
+
+      @if (obj.data) {
+        @for (item of obj.data | keyvalue; track item.key) {
+          <span>
+            {{ item.key }}:
+            {{ item.value !== null && item.value !== undefined ? item.value : 'N/A' }}
+          </span>
+          <br />
+        }
+      } @else {
+        <span>N/A</span>
+        <br />
+      }
+
+      <button [routerLink]="['/detail', obj.id]">
+        View
+      </button>
+
+      <button (click)="confirmDelete(obj.id)">
+        | Delete
+      </button>
+    </li>
+  }
+</ul>
+
+@if (totalPages > 1) {
+  <div>
+    <button (click)="prevPage()" [disabled]="currentPage === 1">
+      Previous
+    </button>
+
+    Page {{ currentPage }} of {{ totalPages }}
+
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">
+      Next
+    </button>
+  </div>
+}

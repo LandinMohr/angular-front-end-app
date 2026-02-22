@@ -1,0 +1,30 @@
+@if (loading) {
+  <p>Loading...</p>
+}
+
+@if (error) {
+  <p>{{ error }}</p>
+}
+
+@if (object) {
+
+  <h2>{{ object.name || 'N/A' }}</h2>
+
+  <p><strong>ID:</strong> {{ object.id || 'N/A' }}</p>
+
+  <h3>Data Fields</h3>
+
+  @if (object.data) {
+    <ul>
+      @for (item of object.data | keyvalue; track item.key) {
+        <li>
+          {{ item.key }}:
+          {{ item.value !== null && item.value !== undefined ? item.value : 'N/A' }}
+        </li>
+      }
+    </ul>
+  } @else {
+    <p>N/A</p>
+  }
+
+}
